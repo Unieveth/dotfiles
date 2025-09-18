@@ -1,0 +1,14 @@
+[Unit]
+Description=Create and route virtual audio sinks with PipeWire
+After=pipewire.service pipewire-pulse.service
+Requires=pipewire.service pipewire-pulse.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/pipewire/setup-audio.sh
+ExecStop=%h/.config/pipewire/reset-virtual-audio.sh
+RemainAfterExit=true
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
