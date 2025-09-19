@@ -56,6 +56,10 @@ uninstall() {
   echo "Updating APT…"
   sudo apt update || true
 
+  echo "Removing 1Password configuration…"
+  rm -rf ~/.config/1Password
+  rm -rf ~/1Password
+
   echo "1Password uninstalled"
 }
 
