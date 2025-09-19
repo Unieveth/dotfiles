@@ -60,7 +60,7 @@ uninstall() {
 }
 
 main() {
-  install_1password()
+  install_1password
 }
 
 # --- arg parsing ---
