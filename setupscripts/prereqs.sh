@@ -14,50 +14,10 @@ EOF
 
 install() {
     echo "Installing prerequisite packages..."
-    
-    # Enable contrib and non-free repositories for additional packages
-    echo "Enabling contrib and non-free repositories..."
-    
-    # Check if contrib/non-free are already enabled in the new .sources format
-    if ! grep -q "contrib" /etc/apt/sources.list.d/*.sources 2>/dev/null && ! grep -q "contrib" /etc/apt/sources.list 2>/dev/null; then
-        echo "Adding contrib and non-free to sources..."
-        
-        # Find the main debian.sources file
-        DEBIAN_SOURCES="/etc/apt/sources.list.d/debian.sources"
-        
-        if [ -f "$DEBIAN_SOURCES" ]; then
-            # Backup original debian.sources
-            sudo cp "$DEBIAN_SOURCES" "${DEBIAN_SOURCES}.backup"
-            
-            # Check current Components line and add contrib/non-free if not present
-            CURRENT_COMPONENTS=$(grep "^Components:" "$DEBIAN_SOURCES" | head -1)
-            echo "Current components: $CURRENT_COMPONENTS"
-            
-            # Add contrib and non-free to Components line if not already present
-            if ! echo "$CURRENT_COMPONENTS" | grep -q "contrib"; then
-                sudo sed -i '/^Components:/ s/main/main contrib/' "$DEBIAN_SOURCES"
-            fi
-            if ! echo "$CURRENT_COMPONENTS" | grep -q "non-free[^-]"; then
-                sudo sed -i '/^Components:/ s/$/\ non-free/' "$DEBIAN_SOURCES"
-            fi
-            
-            NEW_COMPONENTS=$(grep "^Components:" "$DEBIAN_SOURCES" | head -1)
-            echo "Updated components: $NEW_COMPONENTS"
-            echo "Repositories updated in $DEBIAN_SOURCES"
-        else
-            echo "Warning: Could not find debian.sources file, trying traditional sources.list..."
-            # Fallback to old method if .sources file doesn't exist
-            if [ -f /etc/apt/sources.list ]; then
-                sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup
-                sudo sed -i '/deb.*trixie main$/ s/main$/main contrib non-free/' /etc/apt/sources.list
-                sudo sed -i '/deb-src.*trixie main$/ s/main$/main contrib non-free/' /etc/apt/sources.list
-            fi
-        fi
-        
-        echo "Repositories updated"
-    else
-        echo "contrib/non-free repositories already enabled"
-    fi
+
+    echo "Enable contrib and non-free repositories in APT sources if not already enabled..."
+    sudo sed -i -E 's/^(deb .* )(main.*)$/\1main contrib non-free non-free-firmware/' /etc/apt/sources.list
+
     
     sudo apt update
     sudo DEBIAN_FRONTEND=noninteractive apt install -y \
@@ -165,7 +125,7 @@ install() {
     fonts_to_install=(
         "font-jetbrains-mono-nerd-font" 
         "font-source-code-pro-nerd-font"
-        "font-cascadia-code-nerd-font"
+        "font-cascadia-cove-nerd-font"
         "font-hack-nerd-font"
         "font-ubuntu-mono-nerd-font"
     )
