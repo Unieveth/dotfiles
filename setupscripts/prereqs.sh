@@ -18,6 +18,11 @@ install() {
 
     sudo apt install -y wget
     echo "Installing prerequisite packages..."
+    
+    # Enable contrib and non-free repositories for additional packages
+    echo "Enabling contrib and non-free repositories..."
+    sudo sed -i 's/main$/main contrib non-free/g' /etc/apt/sources.list
+    
     sudo apt update
     sudo DEBIAN_FRONTEND=noninteractive apt install -y \
         `# Core system packages` \
