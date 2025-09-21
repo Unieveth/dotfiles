@@ -13,9 +13,6 @@ EOF
 }
 
 install() {
-    local arch
-    arch="$(dpkg --print-architecture)"
-
     echo "Installing Dependencies..."
     sudo apt update
     sudo apt install -y wget
