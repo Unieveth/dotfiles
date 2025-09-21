@@ -124,8 +124,8 @@ install() {
     # Nerd Font versions of popular programming fonts
     fonts_to_install=(
         "font-jetbrains-mono-nerd-font" 
-        "font-source-code-pro-nerd-font"
-        "font-cascadia-cove-nerd-font"
+        "font-sauce-code-pro-nerd-font"
+        "font-caskaydia-cove-nerd-font"
         "font-hack-nerd-font"
         "font-ubuntu-mono-nerd-font"
     )
