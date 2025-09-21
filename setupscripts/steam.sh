@@ -15,47 +15,14 @@ EOF
 
 install() {
     echo "Installing Steam..."
-    
-    # Download and install Steam GPG key
-    echo "Setting up Steam repository..."
-    wget -O "/tmp/steam.gpg" "https://repo.steampowered.com/steam/archive/stable/steam.gpg"
-    sudo cp "/tmp/steam.gpg" "/usr/share/keyrings/steam.gpg"
-    
-    # Add Steam repository
-    sudo tee /etc/apt/sources.list.d/steam-stable.list <<'EOF'
-deb [arch=amd64,i386 signed-by=/usr/share/keyrings/steam.gpg] https://repo.steampowered.com/steam/ stable steam
-deb-src [arch=amd64,i386 signed-by=/usr/share/keyrings/steam.gpg] https://repo.steampowered.com/steam/ stable steam
-EOF
-    
-    # Add i386 architecture and update package lists
-    sudo dpkg --add-architecture i386
-    sudo apt-get update
-    
-    # Install Steam and required dependencies
-    sudo apt-get install -y \
-        libgl1-mesa-dri:amd64 \
-        libgl1-mesa-dri:i386 \
-        libgl1-mesa-glx:amd64 \
-        libgl1-mesa-glx:i386 \
-        steam-launcher
-    
+    wget -O "/tmp/steam_latest.deb" "https://repo.steampowered.com/steam/archive/stable/steam_latest.deb"
+    sudo apt install -y "/tmp/steam_latest.deb"
     echo "Steam installed"
 }
 
 uninstall() {
     echo "Uninstalling Steam..."
-    sudo apt remove -y steam-launcher
-    
-    # Optionally remove repository and GPG key
-    echo "Removing Steam repository..."
-    sudo rm -f /etc/apt/sources.list.d/steam-stable.list
-    sudo rm -f /usr/share/keyrings/steam.gpg
-    
-    # Remove i386 architecture if no other packages need it
-    echo "Note: i386 architecture was added during installation."
-    echo "You may want to remove it with: sudo dpkg --remove-architecture i386"
-    echo "Only do this if no other packages require i386 architecture."
-    
+    sudo apt remove -y steam-installer
     echo "Steam uninstalled"
 }
 
