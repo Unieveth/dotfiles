@@ -13,15 +13,26 @@ EOF
 }
 
 install() {
-    local arch
-    arch="$(dpkg --print-architecture)"
-
-    sudo apt install -y wget
     echo "Installing prerequisite packages..."
     
     # Enable contrib and non-free repositories for additional packages
     echo "Enabling contrib and non-free repositories..."
-    sudo sed -i 's/main$/main contrib non-free/g' /etc/apt/sources.list
+    
+    # Check if contrib/non-free are already enabled
+    if ! grep -q "contrib" /etc/apt/sources.list && ! grep -q "contrib" /etc/apt/sources.list.d/*.list 2>/dev/null; then
+        echo "Adding contrib and non-free to sources..."
+        
+        # Backup original sources.list
+        sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup
+        
+        # Add contrib and non-free to main entries (but not security entries)
+        sudo sed -i '/deb.*trixie main$/ s/main$/main contrib non-free/' /etc/apt/sources.list
+        sudo sed -i '/deb-src.*trixie main$/ s/main$/main contrib non-free/' /etc/apt/sources.list
+        
+        echo "Repositories updated"
+    else
+        echo "contrib/non-free repositories already enabled"
+    fi
     
     sudo apt update
     sudo DEBIAN_FRONTEND=noninteractive apt install -y \
