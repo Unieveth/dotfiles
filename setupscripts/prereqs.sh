@@ -53,7 +53,24 @@ install() {
         zsh \
         bash-completion \
         `# Network tools` \
-        openssh-client
+        openssh-client \
+        `# Fonts and rendering` \
+        fonts-liberation \
+        fonts-liberation2 \
+        fonts-dejavu \
+        fonts-dejavu-core \
+        fonts-dejavu-extra \
+        fonts-noto \
+        fonts-noto-color-emoji \
+        fonts-roboto \
+        fonts-droid-fallback \
+        fonts-ubuntu \
+        fonts-open-sans \
+        fonts-crosextra-carlito \
+        fonts-crosextra-caladea \
+        ttf-mscorefonts-installer \
+        fontconfig \
+        fonts-powerline
     echo "Prerequisite packages installed"
 
     echo "Installing Homebrew..."
@@ -98,6 +115,32 @@ install() {
     else
         echo "uv already installed"
     fi
+
+    echo "Installing modern fonts via Homebrew..."
+    # Install Homebrew font cask repository
+    brew tap homebrew/cask-fonts 2>/dev/null || true
+    
+    # Nerd Font versions of popular programming fonts
+    fonts_to_install=(
+        "font-jetbrains-mono-nerd-font" 
+        "font-source-code-pro-nerd-font"
+        "font-cascadia-code-nerd-font"
+        "font-hack-nerd-font"
+        "font-ubuntu-mono-nerd-font"
+    )
+    
+    for font in "${fonts_to_install[@]}"; do
+        if ! brew list --cask "$font" &> /dev/null; then
+            echo "Installing $font..."
+            brew install --cask "$font" 2>/dev/null || echo "Failed to install $font (may not be available)"
+        else
+            echo "$font already installed"
+        fi
+    done
+
+    # Refresh font cache
+    echo "Refreshing font cache..."
+    fc-cache -fv > /dev/null 2>&1 || true
 
     echo "All prerequisites installed successfully!"
     echo ""
