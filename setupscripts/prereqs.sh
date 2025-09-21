@@ -116,6 +116,22 @@ install() {
     else
         echo "uv already installed"
     fi
+    
+    echo "Installing ffmpeg via Homebrew..."
+    if ! brew list ffmpeg &> /dev/null; then
+        brew install ffmpeg
+        echo "ffmpeg installed"
+    else
+        echo "ffmpeg already installed"
+    fi
+
+    echo "Installing yt-dlp via Homebrew..."
+    if ! brew list yt-dlp &> /dev/null; then
+        brew install yt-dlp
+        echo "yt-dlp installed"
+    else
+        echo "yt-dlp already installed"
+    fi
 
     echo "Installing modern fonts via Homebrew..."
     # Install Homebrew font cask repository
